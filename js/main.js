@@ -73,31 +73,54 @@ function renderSlot () {
 }
 
 function alignSlot () {
-  let colCounter = 0;
-  stateMatrix.forEach((col, i) => {
-    let slotCounter = 0;
-    col.forEach((it) => {
-      if (FIELD_PARAMS.alignCoords.indexOf(it.y) === -1) {
-        if (it.y >= tapes.height) {
-          const minY = col.map((slot) => slot.y).sort((a, b) => a - b);
-          it.y = minY[0] - FIELD_PARAMS.dY - INITIAL_PARAMS.h;
-          countArray[i] = (countArray[i] < INITIAL_PARAMS.colors.length - 1) ? (countArray[i] + 1) : 0;
-          it.count = countArray[i];
-          countArray[i] = (countArray[i] < INITIAL_PARAMS.colors.length - 1) ? (countArray[i] + 1) : 0;
-          it.count = countArray[i];
-        } else {
-          it.y += 1;
-        }
-      } else {
-        slotCounter += 1;
-      }
-      ctx.fillStyle = INITIAL_PARAMS.colors[it.count];
-      ctx.fillRect((INITIAL_PARAMS.w + FIELD_PARAMS.dX) * i, it.y, INITIAL_PARAMS.w, INITIAL_PARAMS.h);
-    });
-    if (slotCounter >= INITIAL_PARAMS.rows) {
+  let colCounter =0;
+  let i = 0;
+  for (i; i < stateMatrix.length; i++) {
+    if (stateMatrix[i].every((it) => FIELD_PARAMS.alignCoords.indexOf(it.y) !== -1)) {
       colCounter += 1;
+      stateMatrix[i].forEach((it) => {
+        ctx.fillStyle = INITIAL_PARAMS.colors[it.count];
+        ctx.fillRect((INITIAL_PARAMS.w + FIELD_PARAMS.dX) * i, it.y, INITIAL_PARAMS.w, INITIAL_PARAMS.h);
+      });
+    } else {
+      let slotCounter = 0;
+      stateMatrix[i].forEach((it) => {
+        if (FIELD_PARAMS.alignCoords.indexOf(it.y) === -1) {
+          if (it.y >= tapes.height) {
+            const minY = stateMatrix[i].map((slot) => slot.y).sort((a, b) => a - b);
+            it.y = minY[0] - FIELD_PARAMS.dY - INITIAL_PARAMS.h;
+            countArray[i] = (countArray[i] < INITIAL_PARAMS.colors.length - 1) ? (countArray[i] + 1) : 0;
+            it.count = countArray[i];
+          } else {
+            it.y += 1;
+          }
+        } else {
+          slotCounter += 1;
+        }
+        ctx.fillStyle = INITIAL_PARAMS.colors[it.count];
+        ctx.fillRect((INITIAL_PARAMS.w + FIELD_PARAMS.dX) * i, it.y, INITIAL_PARAMS.w, INITIAL_PARAMS.h);
+      });
+      if (slotCounter >= INITIAL_PARAMS.rows) {
+        colCounter += 1;
+      }
+      break;
     }
-  });
+  }
+  for (let j = i + 1; j < stateMatrix.length; j++) {
+      stateMatrix[j].forEach((it) => {
+        if (it.y >= tapes.height) {
+          const minY = stateMatrix[j].map((slot) => slot.y).sort((a, b) => a - b);
+          it.y = minY[0] - FIELD_PARAMS.dY - INITIAL_PARAMS.h;
+          countArray[j] = (countArray[j] < INITIAL_PARAMS.colors.length - 1) ? (countArray[j] + 1) : 0;
+          it.count = countArray[j];
+        } else {
+          it.y += 2 + j;
+        }
+        ctx.fillStyle = INITIAL_PARAMS.colors[it.count];
+        ctx.fillRect((INITIAL_PARAMS.w + FIELD_PARAMS.dX) * j, it.y, INITIAL_PARAMS.w, INITIAL_PARAMS.h);
+      });
+      stateMatrix[j].sort((a, b) => a.y - b.y);
+  }
   if (colCounter < INITIAL_PARAMS.cols) {
     clear = setTimeout(() => ctx.clearRect(0, 0, tapes.width, tapes.height), 1);
     render = setTimeout(() => alignSlot(), 1);
