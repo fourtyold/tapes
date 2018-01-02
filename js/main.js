@@ -56,7 +56,8 @@ function renderSlot () {
   stateMatrix.forEach((col, i) => {
     col.forEach((it) => {
       if (it.y >= tapes.height) {
-        it.y -= 280;
+        const minY = col.map((slot) => slot.y).sort((a, b) => a - b);
+        it.y = minY[0] - FIELD_PARAMS.dY - INITIAL_PARAMS.h;
         countArray[i] = (countArray[i] < INITIAL_PARAMS.colors.length - 1) ? (countArray[i] + 1) : 0;
         it.count = countArray[i];
       } else {
@@ -65,6 +66,7 @@ function renderSlot () {
       ctx.fillStyle = INITIAL_PARAMS.colors[it.count];
       ctx.fillRect((INITIAL_PARAMS.w + FIELD_PARAMS.dX) * i, it.y, INITIAL_PARAMS.w, INITIAL_PARAMS.h);
     });
+    col.sort((a, b) => a.y - b.y);
   });
   clear = setTimeout(() => ctx.clearRect(0, 0, tapes.width, tapes.height), 1);
   render = setTimeout(() => renderSlot(), 1);
@@ -77,18 +79,13 @@ function alignSlot () {
     col.forEach((it) => {
       if (FIELD_PARAMS.alignCoords.indexOf(it.y) === -1) {
         if (it.y >= tapes.height) {
-          it.y -= 280;
+          const minY = col.map((slot) => slot.y).sort((a, b) => a - b);
+          it.y = minY[0] - FIELD_PARAMS.dY - INITIAL_PARAMS.h;
+          countArray[i] = (countArray[i] < INITIAL_PARAMS.colors.length - 1) ? (countArray[i] + 1) : 0;
+          it.count = countArray[i];
           countArray[i] = (countArray[i] < INITIAL_PARAMS.colors.length - 1) ? (countArray[i] + 1) : 0;
           it.count = countArray[i];
         } else {
-          // let nearest;
-          // for (let i = 0; i < FIELD_PARAMS.alignCoords.length; i++) {
-          //   if (Math.abs(FIELD_PARAMS.alignCoords[i] - it.y) < 3) {
-          //     nearest = FIELD_PARAMS.alignCoords[i];
-          //     break;
-          //   }
-          // }
-          // it.y = (nearest) ? nearest : (it.y + 1);
           it.y += 1;
         }
       } else {
@@ -98,7 +95,6 @@ function alignSlot () {
       ctx.fillRect((INITIAL_PARAMS.w + FIELD_PARAMS.dX) * i, it.y, INITIAL_PARAMS.w, INITIAL_PARAMS.h);
     });
     if (slotCounter >= INITIAL_PARAMS.rows) {
-
       colCounter += 1;
     }
   });
@@ -122,7 +118,6 @@ function stopPlay () {
   clearTimeout(clear);
   clearTimeout(render);
   alignSlot();
-  console.log(stateMatrix);
   btnStart.classList.add(`active`);
   btnLine.classList.add(`active`);
   btnStart.disabled = false;
