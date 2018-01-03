@@ -44,6 +44,9 @@ export default class Game {
     clearTimeout(this.stopTimer);
   }
 
+  //ВЫРАВНИВАНИЕ КВАДРАТОВ ПРИ ОСТАНОВКЕ
+  //colCounter - СЧЕТЧИК ОСТАНОВЛЕННЫХ ЛЕНТ
+  //slotCounter - СЧЕТЧИК ВЫРОВНЕННЫХ КВАДРАТОВ В ОДНОЙ ЛЕНТЕ
   alignSlot(btnStart, btnLine) {
     let colCounter = 0;
     let i = 0;

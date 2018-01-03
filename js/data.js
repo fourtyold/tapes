@@ -1,3 +1,4 @@
+//ФАЙЛ КОНФИГА
 const INITIAL_PARAMS = {
   colors: [`#FF0000`, `#FF8D40`, `#FFF55E`, `#66FF42`, `#4DFCFF`, `#1B25FF`, `#AD66FF`, `#FF28B4`, `#FF828D`, `#000000`],
   lineColor: `violet`,

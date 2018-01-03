@@ -1,6 +1,9 @@
 
 export default class GameModel {
 
+  //countArray - ВЕКТОР СОСТОЯНИЯ ЦВЕТА КВАДРАТА
+  //lineCounter - СЧЕТЧИК СОСТОЯНИЯ ВЫИГРЫШНОЙ ЛИНИИ
+  //stateMatrix - МАТРИЦА СОСТОЯНИЯ ПОЛЯ
   constructor(gameData) {
     this.data = gameData;
     this.countArray = [0, 0, 0, 0, 0];
@@ -8,6 +11,12 @@ export default class GameModel {
     this.stateMatrix = GameModel.getStateMatrix(this.data.INITIAL_PARAMS, this.data.FIELD_PARAMS, this.countArray);
   }
 
+  //ПЕРЕСЧЕТ МАТРИЦЫ СОСТОЯНИЯ ПРИ ВРАЩЕНИИ ЛЕНТ
+  //2 + i - СКОРОСТЬ ВРАЩЕНИЯ ЛЕНТЫ
+  //count - ОПРЕДЕЛЯЕТ ЦВЕТ КВАДРАТА
+  //minY - РАСЧИТЫВАЕТСЯ ДЛЯ ОПРЕДЕЛЕНИЯ КООРДИНАТЫ, НА КОТОРУЮ ПЕРЕНОСИТСЯ КВАДРАТ, ВЫШЕДШИЙ ЗА ПРЕДЕЛЫ ПОЛЯ
+  //y - КООРДИНАТА ОТРИСОВКИ КВАДРАТА
+  //ВЕКТОР МАТРИЦЫ СОСТОЯНИЯ СОРТИРУЕТСЯ, ЧТОБЫ НИЖНИЙ КВАДРАТ ПЕРЕСЧИТЫВАЛСЯ ПОСЛЕДНИМ. ИНАЧЕ РАССТОЯНИЯ МЕЖДУ КВАДРАТАМИ СБИВАЮТСЯ
   calcState() {
     this.stateMatrix.forEach((col, i) => {
       col.forEach((it) => {
@@ -24,6 +33,8 @@ export default class GameModel {
     });
   }
 
+  //ПЕРЕСЧЕТ ПАРАМЕТРОВ ОДНОГО КВАДРАТА
+  //ИСПОЛЬЗУЕТСЯ ПРИ ОСТАНОВКЕ ВРАЩЕНИЯ
   calcSlotState(it, i, rotationSpeed) {
     if (it.y >= this.data.FIELD_PARAMS.fieldHeight) {
       const minY = this.stateMatrix[i].map((slot) => slot.y).sort((a, b) => a - b);
@@ -35,6 +46,7 @@ export default class GameModel {
     }
   }
 
+  //СОЗДАНИЕ НАЧАЛЬНОЙ МАТРИЦЫ СОСТОЯНИЯ ПОЛЯ
   static getStateMatrix(initParams, fieldParams, countArray) {
     let params = [];
     for (let c = 0; c < initParams.cols; c++) {

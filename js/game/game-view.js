@@ -31,7 +31,7 @@ export default class GameView {
 
   showGame() {
     main.appendChild(this.element);
-    this.initRender();
+    this.renderSlots();
   }
 
   bind() {
@@ -48,15 +48,7 @@ export default class GameView {
     btnLine.addEventListener(`click`, () => this.renderLine());
   }
 
-  initRender () {
-    this.model.stateMatrix.forEach((col, i) => {
-      col.forEach((it) => {
-        this.ctx.fillStyle = this.model.data.INITIAL_PARAMS.colors[it.count];
-        this.ctx.fillRect((this.model.data.INITIAL_PARAMS.slotWidth + this.model.data.FIELD_PARAMS.dX) * i, it.y, this.model.data.INITIAL_PARAMS.slotWidth, this.model.data.INITIAL_PARAMS.slotHeight);
-      });
-    });
-  }
-
+  //ОТРИСОВКА ВСЕГО ПОЛЯ
   renderSlots() {
     this.model.stateMatrix.forEach((col, i) => {
       col.forEach((it) => {
@@ -66,11 +58,14 @@ export default class GameView {
     });
   }
 
+  //ОТРИСОВКА ОДНОГО КВАДРАТА
+  //ИСПОЛЬЗУЕТСЯ ПРИ ОСТАНОВКЕ ВРАЩЕНИЯ
   renderOneSlot(it, i) {
     this.ctx.fillStyle = this.model.data.INITIAL_PARAMS.colors[it.count];
     this.ctx.fillRect((this.model.data.INITIAL_PARAMS.slotWidth + this.model.data.FIELD_PARAMS.dX) * i, it.y, this.model.data.INITIAL_PARAMS.slotWidth, this.model.data.INITIAL_PARAMS.slotHeight);
   }
 
+  //ОТРИСОВКА ВЫИГРЫШНОЙ ЛИНИИ
   renderLine() {
     this.ctx.clearRect(0, 0, this.model.data.FIELD_PARAMS.fieldWidth, this.model.data.FIELD_PARAMS.fieldHeight);
     this.renderSlots();
