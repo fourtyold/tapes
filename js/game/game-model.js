@@ -4,6 +4,7 @@ export default class GameModel {
   constructor(gameData) {
     this.data = gameData;
     this.countArray = [0, 0, 0, 0, 0];
+    this.lineCounter = 0;
     this.stateMatrix = GameModel.getStateMatrix(this.data.INITIAL_PARAMS, this.data.FIELD_PARAMS, this.countArray);
   }
 

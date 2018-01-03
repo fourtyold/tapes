@@ -45,6 +45,7 @@ export default class GameView {
       this.delTimeout();
       this.stopPlay(btnStart, btnStop, btnLine);
     });
+    btnLine.addEventListener(`click`, () => this.renderLine());
   }
 
   initRender () {
@@ -68,6 +69,20 @@ export default class GameView {
   renderOneSlot(it, i) {
     this.ctx.fillStyle = this.model.data.INITIAL_PARAMS.colors[it.count];
     this.ctx.fillRect((this.model.data.INITIAL_PARAMS.slotWidth + this.model.data.FIELD_PARAMS.dX) * i, it.y, this.model.data.INITIAL_PARAMS.slotWidth, this.model.data.INITIAL_PARAMS.slotHeight);
+  }
+
+  renderLine() {
+    this.ctx.clearRect(0, 0, this.model.data.FIELD_PARAMS.fieldWidth, this.model.data.FIELD_PARAMS.fieldHeight);
+    this.renderSlots();
+    this.ctx.beginPath();
+    this.ctx.lineWidth = this.model.data.INITIAL_PARAMS.lineWidth;
+    this.ctx.strokeStyle = this.model.data.INITIAL_PARAMS.lineColor;
+    this.ctx.moveTo(this.model.data.WIN_LINES[this.model.lineCounter].x[0], this.model.data.WIN_LINES[this.model.lineCounter].y[0]);
+    for (let i = 1; i < this.model.data.WIN_LINES[this.model.lineCounter].x.length; i++) {
+      this.ctx.lineTo(this.model.data.WIN_LINES[this.model.lineCounter].x[i], this.model.data.WIN_LINES[this.model.lineCounter].y[i]);
+    }
+    this.ctx.stroke();
+    this.model.lineCounter = (this.model.lineCounter < this.model.data.WIN_LINES.length - 1) ? this.model.lineCounter + 1 : 0;
   }
 
   startPlay() {}
