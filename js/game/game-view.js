@@ -1,4 +1,4 @@
-const body = document.querySelector(`.body`);
+const main = document.querySelector(`.main`);
 
 export default class GameView {
 
@@ -9,7 +9,7 @@ export default class GameView {
 
   get template() {
     return `<canvas height='${this.model.data.FIELD_PARAMS.fieldHeight}' width='${this.model.data.FIELD_PARAMS.fieldWidth}' class="tapes"></canvas>
-  <div class="container">
+  <div class="btn-container">
     <button type="button" class="btn active line">Line</button>
     <button type="button" class="btn active start">Start</button>
     <button type="button" class="btn stop" disabled>Stop</button>
@@ -30,7 +30,7 @@ export default class GameView {
   }
 
   showGame() {
-    body.appendChild(this.element);
+    main.appendChild(this.element);
     this.initRender();
   }
 
@@ -96,6 +96,7 @@ export default class GameView {
 
   static getElementFromTemplate(str) {
     let div = document.createElement(`div`);
+    div.classList.add(`container`);
     div.appendChild(document.createRange().createContextualFragment(str));
     return div;
   }

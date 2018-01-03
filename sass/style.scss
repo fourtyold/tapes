@@ -1,5 +1,11 @@
+.btn-container {
+  display: flex;
+  width: 25%;
+  margin: 0 auto;
+}
+
 .btn {
-  margin-left: 50px;
+  margin: 0 auto;
   padding: 10px 20px;
   background: rgb(255, 0, 0);
   border: 1px solid black;
@@ -26,5 +32,6 @@
 }
 
 .tapes {
-  //background: gray;
+  display: block;
+  margin: 0 auto;
 }
